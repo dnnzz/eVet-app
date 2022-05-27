@@ -1,45 +1,56 @@
 import { View } from 'react-native'
 import React from 'react';
-import { Card , Text , makeStyles } from '@rneui/themed';
+import { Card, Button, Text, makeStyles } from '@rneui/themed';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function Home(props) {
+  const {navigation} = props;
   const styles = useStyles(props);
-  const handlePress = () =>{
-    console.log("adsadjkl")
+  const handlePress = (routeName) => {
+     navigation.navigate(routeName)
   }
   return (
-    <View style={styles.container}>
-      <Card onPress={handlePress} containerStyle={{display:"flex",justifyContent:"center",height:150,width:150}}>
-        <View>
-          <Text style={styles.text}>Hayvanlarım</Text>
-        </View>
-      </Card>
+    <View style={styles.view}>
+      <TouchableOpacity onPress={() => handlePress("Pets")}>
+        <Card containerStyle={styles.container}>
+          <Button>
+            <Text style={styles.text}>Hayvanlarım</Text></Button>
+        </Card>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => handlePress("Ownership")}>
       <Card containerStyle={styles.container}>
-        <View>
           <Text style={styles.text}>Sahiplenme</Text>
-        </View>
       </Card>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => handlePress("Appointment")}>
       <Card containerStyle={styles.container}>
-        <View>
           <Text style={styles.text}>Randevu al</Text>
-        </View>
       </Card>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => handlePress("Appointments")}>
       <Card containerStyle={styles.container}>
-        <View>
           <Text style={styles.text}>Randevularım</Text>
-        </View>
       </Card>
+      </TouchableOpacity>
     </View>
   )
 }
-const useStyles = {
-  container:{
-    display:"flex",
-    justifyContent:"center",
-    height:150,
-    width:150
+const useStyles = makeStyles((theme, props) => ({
+  view: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginLeft: 30,
+    marginTop: 130
   },
-  text:{
-    textAlign:"center"
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    height: 150,
+    width: 150
+  },
+  text: {
+    textAlign: "center",
+    color: "#000000",
   }
-}
+}))

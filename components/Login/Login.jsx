@@ -31,7 +31,7 @@ export default function Login(props) {
         placeholder='Şifre' />
       <Button buttonStyle={styles.button}>Giriş yap</Button>
       <Button titleStyle={styles.registerBtn} 
-      title="Hesabınız yok mu ? Kaydolun" onPress={() => props.navigation.push("Register")} />
+      title="Hesabınız yok mu ? Kaydolun" onPress={() => props.navigation.navigate("Register")} />
     </View>
   )
 }
