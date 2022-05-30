@@ -9,6 +9,9 @@ import Home from "./components/Home/Home";
 import Pets from './components/Pets/Pets';
 import Appointment from './components/Appointment/Appointment';
 import Appointments from './components/Appointments/Appointments';
+import Adopt from './components/Adopt/Adopt';
+import PetScreen from './components/Adopt/PetScreen/PetScreen';
+import TakeAppointment from './components/TakeAppointment/TakeAppointment'
 
 
 const theme = createTheme({
@@ -40,6 +43,9 @@ export default function App() {
         <Drawer.Screen  options={setDrawerOptions("Hayvanlarım")} name="Pets" component={Pets} />
         <Drawer.Screen  options={setDrawerOptions("Randevular")} name="Appointment" component={Appointment} />
         <Drawer.Screen  options={setDrawerOptions("Tüm randevular")} name="Appointments" component={Appointments} />
+        <Drawer.Screen  options={setDrawerOptions("Sahiplenme")} name="Adopt" component={Adopt} />
+        <Drawer.Screen  options={setDrawerOptions("Detay")} name="PetScreen" component={PetScreen} />
+        <Drawer.Screen  options={setDrawerOptions("Randevu al")} name="TakeAppointment" component={TakeAppointment} />
       </Drawer.Navigator>
       </ThemeProvider>
     </NavigationContainer>
