@@ -92,6 +92,6 @@ const styles = StyleSheet.create({
         marginLeft: 50
       },
     text:{
-        fontSize:"30px"
+        fontSize:30
     }
   });

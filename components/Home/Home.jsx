@@ -22,7 +22,7 @@ export default function Home(props) {
           <Text style={styles.text}>Sahiplenme</Text>
       </Card>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => handlePress("Appointment")}>
+      <TouchableOpacity onPress={() => handlePress("TakeAppointment")}>
       <Card containerStyle={styles.container}>
           <Text style={styles.text}>Randevu al</Text>
       </Card>
