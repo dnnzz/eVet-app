@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword
 } from 'firebase/auth';
 import "firebase/firestore";
-import { getFirestore , setDoc , doc, getDoc, collection } from 'firebase/firestore';
+import { getFirestore , setDoc , doc, getDoc, collection, updateDoc } from 'firebase/firestore';
 const firebaseConfig = {
   apiKey: "AIzaSyA8hCr73u7RiiVbDDsCjY942ULCjsGMNM4",
   authDomain: "evet-app-29a9b.firebaseapp.com",
@@ -30,34 +30,33 @@ export const register = (email, password) => {
     });
 }
 export const firestore =  getFirestore(app);
-export const createUserProfileDocument = async (user,additionalData) => {
-  if(!user) return;
+export const createUserProfileDocument = async (details) => {
+  if(!details) return;
   // get reference ..
-  const collectionRef = await collection(firestore,"users");
-  const userRef = await doc(collectionRef,`${user.uid}`);
-  if(!userRef){
-    const {name,surname,email} = user;
+  const collectionRef = await collection(firestore,"userTable");
+  const userRef = await doc(collectionRef,`${details.email}`);
+  if(!userRef.exists){
+    const {name,surname,veterinary,email} = details;
     const createdAt = new Date();
-    console.log(user,"ananı skim",additionalData);
     try{
       await setDoc(userRef,{
-        name : name ? name : "",
-        surname : surname ? surname : "",
-        email,
-        createdAt,
-        ...additionalData,
+        email:email,
+        name:name,
+        surname:surname,
+        veterinary:veterinary,
+        createdAt
       })
     }catch(error){
       console.error(error); 
     }
   }
-  return getUserDocument(user.uid);
+  return getUserDocument(details.email);
 };
 
-export const getUserDocument = async (uid) =>{
-  if(!uid) return null;
+export const getUserDocument = async (email) =>{
+  if(!email) return null;
   try{
-    const userRef = doc(firestore,"users",uid);
+    const userRef = doc(firestore,"userTable",email);
     return await getDoc(userRef);
   }catch(error){
     console.error(error);

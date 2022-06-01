@@ -2,7 +2,7 @@ import { View } from 'react-native'
 import React from 'react'
 import { Image, Input, Button, makeStyles } from '@rneui/themed';
 import { UserContext } from '../../firebase/Context';
-import { auth , signOut } from '../../firebase/Firebase';
+import { auth } from '../../firebase/Firebase';
 export default function Login(props) {
   const { contextLogin  } = React.useContext(UserContext)
   const styles = useStyles(props);
@@ -36,7 +36,6 @@ export default function Login(props) {
         style={styles.input}
         placeholder='Şifre' />
       <Button onPress={() => handleSignIn()} buttonStyle={styles.button}>Giriş yap</Button>
-      <Button onPress={() => signOut()} buttonStyle={styles.button}>çık</Button>
       <Button titleStyle={styles.registerBtn}
         title="Hesabınız yok mu ? Kaydolun" onPress={() => props.navigation.navigate("Register")} />
     </View>
@@ -44,7 +43,7 @@ export default function Login(props) {
 }
 const useStyles = makeStyles((theme, props) => ({
   container: {
-    marginTop: 30,
+    marginTop: 20,
     padding: 50,
     display: "flex",
     flexDirection: "column",

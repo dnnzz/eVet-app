@@ -1,27 +1,41 @@
-import { createContext , useState  ,useEffect} from "react";
-import {auth,createUserProfileDocument,login} from './Firebase';
+import { createContext, useState, useEffect } from "react";
+import { auth, createUserProfileDocument, login } from './Firebase';
 
 export const UserContext = createContext({ email: '', auth: false });
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(undefined);
-  const contextLogin = async (email,password) => {
-      login(auth,email,password);
+  const [userDataState, setUserDataState] = useState({
+    name: "",
+    surname: "",
+    email: "",
+    password: "",
+    veterinary: ""
+  })
+  const [vetValue, setVetValue] = useState("");
+  const contextLogin = async (email, password) => {
+    login(auth, email, password);
+    console.log(user);
   };
+  const createUserProfile = () => {
+    setUserDataState({...userDataState,veterinary:vetValue});
+    createUserProfileDocument(userDataState);
+  }
   useEffect(() => {
-    const unsubscribeFromAuthStatuChanged = auth.onAuthStateChanged(async (user) => {
+    const unsubscribeFromAuthStatuChanged = auth.onAuthStateChanged((user) => {
       if (user) {
-        const userRef = await createUserProfileDocument(user);
+        setUser(user)
       } else {
         setUser(undefined);
       }
     });
-
-    return unsubscribeFromAuthStatuChanged;
+    return () =>{
+      return unsubscribeFromAuthStatuChanged();
+    }
   }, []);
-    return (
-      <UserContext.Provider value={{ user, contextLogin  }}>
-        {children}
-      </UserContext.Provider>
-    );
-  }
+  return (
+    <UserContext.Provider value={{ user,contextLogin,vetValue, setVetValue, createUserProfile,userDataState ,setUserDataState }}>
+      {children}
+    </UserContext.Provider>
+  );
+}

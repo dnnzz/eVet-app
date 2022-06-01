@@ -2,14 +2,15 @@ import { ScrollView, SafeAreaView, View } from 'react-native'
 import React from 'react'
 import { Image, Input, Button, makeStyles } from '@rneui/themed';
 import DropDownPicker from 'react-native-dropdown-picker'
-import { register, createUserProfileDocument } from '../../firebase/Firebase';
+import { register } from '../../firebase/Firebase';
+import { UserContext } from '../../firebase/Context';
 
 
 export default function Register(props) {
     const styles = useStyles(props);
+    const { userDataState, setUserDataState, vetValue, setVetValue , createUserProfile } = React.useContext(UserContext);
     const logo = require("../../assets/yesil.png");
     const [open, setOpen] = React.useState(false);
-    const [value, setValue] = React.useState(null);
     const [items, setItems] = React.useState([
         { label: 'Vet hasan', value: 'hasan' },
         { label: 'Vet ali', value: 'ali' },
@@ -17,19 +18,13 @@ export default function Register(props) {
         { label: 'Şirin pati', value: 'sirinpati' },
         { label: 'Hayvan hastanesi', value: 'hayvanhastanesi' },
     ]);
-    const [userDataState, setUserDataState] = React.useState({
-        name: "",
-        surname: "",
-        email: "",
-        password: ""
-    })
     const handleChange = (text, type) => {
         setUserDataState({ ...userDataState, [type]: text });
     }
     const handleSubmit = () => {
         const { email, password } = userDataState;
         register(email, password)
-        createUserProfileDocument(userDataState,{veteriner:value});
+        createUserProfile()
     }
     return (
         <SafeAreaView>
@@ -41,6 +36,7 @@ export default function Register(props) {
                     inputContainerStyle={{ borderBottomWidth: 0 }}
                     leftIcon={{ type: 'material-community', name: 'email' }}
                     style={styles.input}
+                    autoCapitalize='none'
                     placeholder='Email' />
                 <Input
                     onChangeText={(e) => handleChange(e, "name")}
@@ -67,10 +63,10 @@ export default function Register(props) {
                     <DropDownPicker
                         listMode='SCROLLVIEW'
                         open={open}
-                        value={value}
+                        value={vetValue}
                         items={items}
                         setOpen={setOpen}
-                        setValue={setValue}
+                        setValue={setVetValue}
                         setItems={setItems}
                         placeholder="Veteriner seçiniz"
                         dropDownDirection='TOP'
@@ -80,7 +76,7 @@ export default function Register(props) {
                         }}
                     />
                 </View>
-                <Button onPress={() =>handleSubmit()} buttonStyle={styles.button}>Kayıt ol</Button>
+                <Button onPress={() => handleSubmit()} buttonStyle={styles.button}>Kayıt ol</Button>
             </ScrollView>
         </SafeAreaView>
     )

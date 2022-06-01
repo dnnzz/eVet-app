@@ -15,7 +15,7 @@ import Adopt from './components/Adopt/Adopt';
 import PetScreen from './components/Adopt/PetScreen/PetScreen';
 import TakeAppointment from './components/TakeAppointment/TakeAppointment'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { UserProvider } from './firebase/Context';
+import { UserContext, UserProvider } from './firebase/Context';
 // Logs.disableExpoCliLogging();
 // LogBox.ignoreAllLogs();
 const theme = createTheme({
@@ -41,28 +41,44 @@ function setDrawerOptions(routeName){
     headerTintColor:"black",
   }
 }
+
 export default function App() {
+  // In the body...
+const render = React.useCallback(
+  props => <Register {...props} />,
+  []
+);
+const {user} = React.useContext(UserContext);
+const unAuthenticatedScreens = () => (
+  <>
+  <Drawer.Screen options={setDrawerOptions("Giriş")} name="Login" component={Login} />
+  <Drawer.Screen  options={setDrawerOptions("Kayıt ol")} name="Register" component={render} />
+  </>
+)
+const authenticatedScreens = () =>(
+  <>
+  <Drawer.Screen  options={setDrawerOptions("Ana Ekran")} name="Home" component={Home} />
+  <Drawer.Screen  options={{...setDrawerOptions("Hayvanlarım"),
+ headerRight: () => (
+  <TouchableOpacity style={{marginRight:30}}>
+    <Text>Ekle</Text>
+  </TouchableOpacity>
+)}} name="Pets" component={Pets} />
+  <Drawer.Screen  options={setDrawerOptions("Randevular")} name="Appointment" component={Appointment} />
+  <Drawer.Screen  options={setDrawerOptions("Tüm randevular")} name="Appointments" component={Appointments} />
+  <Drawer.Screen  options={setDrawerOptions("Sahiplenme")} name="Adopt" component={Adopt} />
+  <Drawer.Screen  options={setDrawerOptions("Detay")} name="PetScreen" component={PetScreen} />
+  <Drawer.Screen  options={setDrawerOptions("Randevu al")} name="TakeAppointment" component={TakeAppointment} />
+  </>
+)
   return (
     <NavigationContainer theme={navTheme}>
       <UserProvider>
       <ThemeProvider theme={theme}>
       <Drawer.Navigator
       useLegacyImplementation
-      initialRouteName='Login'>
-        <Drawer.Screen options={setDrawerOptions("Giriş")} name="Login" component={Login} />
-        <Drawer.Screen  options={setDrawerOptions("Kayıt ol")} name="Register" component={Register} />
-        <Drawer.Screen  options={setDrawerOptions("Ana Ekran")} name="Home" component={Home} />
-        <Drawer.Screen  options={{...setDrawerOptions("Hayvanlarım"),
-       headerRight: () => (
-        <TouchableOpacity style={{marginRight:30}}>
-          <Text>Ekle</Text>
-        </TouchableOpacity>
-      )}} name="Pets" component={Pets} />
-        <Drawer.Screen  options={setDrawerOptions("Randevular")} name="Appointment" component={Appointment} />
-        <Drawer.Screen  options={setDrawerOptions("Tüm randevular")} name="Appointments" component={Appointments} />
-        <Drawer.Screen  options={setDrawerOptions("Sahiplenme")} name="Adopt" component={Adopt} />
-        <Drawer.Screen  options={setDrawerOptions("Detay")} name="PetScreen" component={PetScreen} />
-        <Drawer.Screen  options={setDrawerOptions("Randevu al")} name="TakeAppointment" component={TakeAppointment} />
+      initialRouteName={!user ? "Login" : "Home"}>
+      {!user ? unAuthenticatedScreens() : authenticatedScreens()}
       </Drawer.Navigator>
       </ThemeProvider>
       </UserProvider>
