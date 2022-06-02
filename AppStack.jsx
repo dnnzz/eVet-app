@@ -44,8 +44,6 @@ function setDrawerOptions(routeName) {
   }
 }
 export default function AppStack(props) {
-  const { navigation } = props;
-  console.log(props);
   const [petData, setPetData] = React.useState({
     name: "",
     info: ""

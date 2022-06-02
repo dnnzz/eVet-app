@@ -2,6 +2,7 @@ import { View } from 'react-native'
 import React from 'react';
 import { Card, Button, Text, makeStyles } from '@rneui/themed';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import FlipCard from 'react-native-flip-card';
 
 export default function Home(props) {
   const {navigation} = props;
@@ -32,6 +33,9 @@ export default function Home(props) {
           <Text style={styles.text}>Randevularım</Text>
       </Card>
       </TouchableOpacity>
+      <View>
+        {/* <FlipCard /> */}
+      </View>
     </View>
   )
 }

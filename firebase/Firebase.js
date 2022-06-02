@@ -8,7 +8,6 @@ import "firebase/firestore";
 import { getFirestore , setDoc , 
   doc,
   query,
-  where,
   getDoc, 
   collection, 
   getDocs, 
@@ -26,14 +25,14 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
 export const login = async (email, password) => {
   signInWithEmailAndPassword(auth, email, password)
-  console.log(email,password)
 }
 export const register = (email, password) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
-      const user = userCredential
+      const user = userCredential.user
     })
     .catch((error) => {
+      console.error(error.code)
       console.error(error);
     });
 }

@@ -4,7 +4,7 @@ import { Image, Input, Button, makeStyles } from '@rneui/themed';
 import { UserContext } from '../../firebase/Context';
 import { auth } from '../../firebase/Firebase';
 export default function Login(props) {
-  const { contextLogin  } = React.useContext(UserContext)
+  const { contextLogin } = React.useContext(UserContext)
   const styles = useStyles(props);
   const logo = require("../../assets/yesil.png");
   const [userDataState, setUserDataState] = React.useState({
@@ -16,36 +16,36 @@ export default function Login(props) {
   }
   const handleSignIn = () => {
     const { email, password } = userDataState;
-    contextLogin(auth, email, password);
+    contextLogin(email, password);
   }
-  return ( 
+  return (
     <View style={styles.container}>
-      <Image style={styles.img} source={logo} />
-      <Input
-        onChangeText={(e) => handleChange(e, "email")}
-        placeholderTextColor={"black"}
-        inputContainerStyle={{ borderBottomWidth: 0 }}
-        leftIcon={{ type: 'material-community', name: 'email' }}
-        style={styles.input}
-        autoCapitalize="none"
-        placeholder='Email' />
-      <Input
-        onChangeText={(e) => handleChange(e, "password")}
-        placeholderTextColor={"black"}
-        inputContainerStyle={{ borderBottomWidth: 0 }}
-        leftIcon={{ type: 'entypo', name: 'lock' }}
-        style={styles.input}
-        secureTextEntry={true}
-        placeholder='Şifre' />
-      <Button onPress={() => handleSignIn()} buttonStyle={styles.button}>Giriş yap</Button>
-      <Button titleStyle={styles.registerBtn}
-        title="Hesabınız yok mu ? Kaydolun" onPress={() => props.navigation.navigate("Register")} />
+        <Image style={styles.img} source={logo} />
+        <Input
+          onChangeText={(e) => handleChange(e, "email")}
+          placeholderTextColor={"black"}
+          inputContainerStyle={{ borderBottomWidth: 0 }}
+          leftIcon={{ type: 'material-community', name: 'email' }}
+          style={styles.input}
+          autoCapitalize="none"
+          placeholder='Email' />
+        <Input
+          onChangeText={(e) => handleChange(e, "password")}
+          placeholderTextColor={"black"}
+          inputContainerStyle={{ borderBottomWidth: 0 }}
+          leftIcon={{ type: 'entypo', name: 'lock' }}
+          style={styles.input}
+          secureTextEntry={true}
+          placeholder='Şifre' />
+        <Button onPress={() => handleSignIn()} buttonStyle={styles.button}>Giriş yap</Button>
+        <Button titleStyle={styles.registerBtn}
+          title="Hesabınız yok mu ? Kaydolun" onPress={() => props.navigation.navigate("Register")} />
     </View>
   )
 }
 const useStyles = makeStyles((theme, props) => ({
   container: {
-    marginTop: 20,
+    marginTop: 10,
     padding: 50,
     display: "flex",
     flexDirection: "column",

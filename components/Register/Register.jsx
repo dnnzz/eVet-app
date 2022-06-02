@@ -90,7 +90,7 @@ export default function Register(props) {
 const useStyles = makeStyles((theme, props) => ({
     container: {
         height: "100%",
-        padding: 40,
+        padding: 30,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -110,6 +110,6 @@ const useStyles = makeStyles((theme, props) => ({
     img: {
         height: 200,
         width: 200,
-        marginBottom: 40
+        marginBottom: 10
     }
 }))
