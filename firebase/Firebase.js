@@ -17,8 +17,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
-export const login = (auth, email, password) => {
+export const login = async (email, password) => {
   signInWithEmailAndPassword(auth, email, password)
+  console.log(email,password)
 }
 export const register = (email, password) => {
   createUserWithEmailAndPassword(auth, email, password)
@@ -58,6 +59,23 @@ export const getUserDocument = async (email) =>{
   try{
     const userRef = doc(firestore,"userTable",email);
     return await getDoc(userRef);
+  }catch(error){
+    console.error(error);
+  }
+}
+
+export const addPetToDB = async (email,pet) => {
+  console.log(email,pet)
+  if(!email) return;
+  const {name,info} = pet;
+  const userRef = await doc(firestore,"userTable",email);
+  const petTableRef = await collection(userRef,"petTable");
+  const petRef = await doc(petTableRef,name);
+  try{
+    await setDoc(petRef,{
+      name:name,
+      info:info
+    });
   }catch(error){
     console.error(error);
   }

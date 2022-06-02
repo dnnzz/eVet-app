@@ -27,6 +27,7 @@ export default function Login(props) {
         inputContainerStyle={{ borderBottomWidth: 0 }}
         leftIcon={{ type: 'material-community', name: 'email' }}
         style={styles.input}
+        autoCapitalize="none"
         placeholder='Email' />
       <Input
         onChangeText={(e) => handleChange(e, "password")}
@@ -34,6 +35,7 @@ export default function Login(props) {
         inputContainerStyle={{ borderBottomWidth: 0 }}
         leftIcon={{ type: 'entypo', name: 'lock' }}
         style={styles.input}
+        secureTextEntry={true}
         placeholder='Şifre' />
       <Button onPress={() => handleSignIn()} buttonStyle={styles.button}>Giriş yap</Button>
       <Button titleStyle={styles.registerBtn}

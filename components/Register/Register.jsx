@@ -2,13 +2,15 @@ import { ScrollView, SafeAreaView, View } from 'react-native'
 import React from 'react'
 import { Image, Input, Button, makeStyles } from '@rneui/themed';
 import DropDownPicker from 'react-native-dropdown-picker'
-import { register } from '../../firebase/Firebase';
+import { register, signOut } from '../../firebase/Firebase';
 import { UserContext } from '../../firebase/Context';
+import { ListAccordionGroupContext } from 'react-native-paper/lib/typescript/components/List/ListAccordionGroup';
 
 
 export default function Register(props) {
+    const { navigation } = props;
     const styles = useStyles(props);
-    const { userDataState, setUserDataState, vetValue, setVetValue , createUserProfile } = React.useContext(UserContext);
+    const {user,userDataState, setUserDataState, createUserProfile } = React.useContext(UserContext);
     const logo = require("../../assets/yesil.png");
     const [open, setOpen] = React.useState(false);
     const [items, setItems] = React.useState([
@@ -18,6 +20,7 @@ export default function Register(props) {
         { label: 'Şirin pati', value: 'sirinpati' },
         { label: 'Hayvan hastanesi', value: 'hayvanhastanesi' },
     ]);
+    const [vetValue, setVetValue] = React.useState('');
     const handleChange = (text, type) => {
         setUserDataState({ ...userDataState, [type]: text });
     }
@@ -26,6 +29,9 @@ export default function Register(props) {
         register(email, password)
         createUserProfile()
     }
+    React.useEffect(() => {
+        setUserDataState({ ...userDataState, veterinary: vetValue })
+    }, [vetValue]);
     return (
         <SafeAreaView>
             <ScrollView nestedScrollEnabled={true} contentContainerStyle={styles.container}>

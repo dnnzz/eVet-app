@@ -12,13 +12,10 @@ export const UserProvider = ({ children }) => {
     password: "",
     veterinary: ""
   })
-  const [vetValue, setVetValue] = useState("");
   const contextLogin = async (email, password) => {
     login(auth, email, password);
-    console.log(user);
   };
   const createUserProfile = () => {
-    setUserDataState({...userDataState,veterinary:vetValue});
     createUserProfileDocument(userDataState);
   }
   useEffect(() => {
@@ -34,7 +31,7 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
   return (
-    <UserContext.Provider value={{ user,contextLogin,vetValue, setVetValue, createUserProfile,userDataState ,setUserDataState }}>
+    <UserContext.Provider value={{ user,contextLogin,createUserProfile,userDataState ,setUserDataState }}>
       {children}
     </UserContext.Provider>
   );
