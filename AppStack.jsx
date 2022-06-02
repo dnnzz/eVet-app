@@ -43,9 +43,9 @@ function setDrawerOptions(routeName) {
     unmountOnBlur: true,
   }
 }
-
 export default function AppStack(props) {
   const { navigation } = props;
+  console.log(props);
   const [petData, setPetData] = React.useState({
     name: "",
     info: ""
@@ -68,6 +68,16 @@ export default function AppStack(props) {
     setPetData({ name: "", info: "" });
     setIsDataChanged(true);
   }
+  function CustomDrawerContent(props) {
+    return (
+      <DrawerContentScrollView {...props}>
+        <DrawerItemList {...props} />
+        <DrawerItem label="Çıkış yap" onPress={() => {
+          signOut();
+        }} />
+      </DrawerContentScrollView>
+    );
+  }
   const renderAddScreen = () => (
     <>
       <TouchableOpacity onPress={handlePress} style={{ marginRight: 30 }}>
@@ -89,12 +99,18 @@ export default function AppStack(props) {
   )
   const unAuthenticatedScreens = () => (
     <>
+    <Drawer.Navigator useLegacyImplementation
+      initialRouteName={"Login"}>
       <Drawer.Screen options={setDrawerOptions("Giriş")} name="Login" component={Login} />
       <Drawer.Screen options={setDrawerOptions("Kayıt ol")} name="Register" component={render} />
+      </Drawer.Navigator>
     </>
   )
   const authenticatedScreens = () => (
     <>
+    <Drawer.Navigator useLegacyImplementation
+      initialRouteName={"Home"}
+      drawerContent={props => <CustomDrawerContent {...props} />}>
       <Drawer.Screen options={setDrawerOptions("Ana Ekran")} name="Home" component={Home} />
       <Drawer.Screen options={{
         ...setDrawerOptions("Hayvanlarım"),
@@ -105,13 +121,11 @@ export default function AppStack(props) {
       <Drawer.Screen options={setDrawerOptions("Sahiplenme")} name="Adopt" component={Adopt} />
       <Drawer.Screen options={setDrawerOptions("Detay")} name="PetScreen" component={PetScreen} />
       <Drawer.Screen options={setDrawerOptions("Randevu al")} name="TakeAppointment" component={TakeAppointment} />
+    </Drawer.Navigator>
     </>
   )
   return (
-    <Drawer.Navigator
-      useLegacyImplementation
-      initialRouteName={!user ? "Login" : "Home"}>
-      {!user ? unAuthenticatedScreens() : authenticatedScreens()}
-    </Drawer.Navigator>
-  );
+  <>
+  {!user ? unAuthenticatedScreens() : authenticatedScreens()}
+  </>);
 }

@@ -6,7 +6,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 export default function SelectedPetAppointments(props) {
     const styles = useStyles(props);
     const [showDialog, toggleDialog] = React.useState(false)
-    console.log(props.route.params.arr)
     const handlePress = () => {
         toggleDialog(!showDialog);
     }
