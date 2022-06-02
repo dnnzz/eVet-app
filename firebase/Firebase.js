@@ -37,6 +37,7 @@ export const register = (email, password) => {
     });
 }
 export const firestore =  getFirestore(app);
+// creates user profile in firestore collection
 export const createUserProfileDocument = async (details) => {
   if(!details) return;
   // get reference ..
@@ -59,7 +60,7 @@ export const createUserProfileDocument = async (details) => {
   }
   return getUserDocument(details.email);
 };
-
+// gets user profile from firestore collection
 export const getUserDocument = async (email) =>{
   if(!email) return null;
   try{
@@ -69,7 +70,7 @@ export const getUserDocument = async (email) =>{
     console.error(error);
   }
 }
-
+// adds pet to firestore collection
 export const addPetToDB = async (email,pet) => {
   if(!email) return;
   const {name,info} = pet;
