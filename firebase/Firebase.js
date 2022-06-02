@@ -92,4 +92,25 @@ export const getPetsFromDB = async (email,setLoading) => {
   return petsArr;
 }
 
+export const postAppointmentToDB = async (email,appointment) => {
+  if(!email) return;
+  const {pet,type,hour,date,additionalMsg} = appointment;
+  const userRef = await doc(firestore,"userTable",email);
+  const petCollection = await collection(userRef,"petTable");
+  const petRef = await doc(petCollection,pet);
+  const appointmentCollection = await collection(petRef,"appointmentTable");
+  const appointmentRef = await doc(appointmentCollection,pet);
+  try{
+    await setDoc(appointmentRef,{
+      pet:pet,
+      date:date,
+      hour:hour,
+      type:type,
+      additionalMsg:additionalMsg
+    });
+  }catch(error){
+    console.error(error);
+  }
+}
+
 export const signOut = () => auth.signOut();
