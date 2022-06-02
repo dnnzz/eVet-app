@@ -116,7 +116,7 @@ export default function AppStack(props) {
       }} name="Pets" component={Pets} />
       <Drawer.Screen options={setDrawerOptions("Randevular")} name="SelectedPetAppointment" component={SelectedPetAppointment} />
       <Drawer.Screen options={setDrawerOptions("Tüm randevular")} name="Appointments" component={Appointments} />
-      <Drawer.Screen options={setDrawerOptions("Sahiplenme")} name="Adopt" component={Adopt} />
+      <Drawer.Screen options={setDrawerOptions("Sahiplenme")} name="OwnerShip" component={Adopt} />
       <Drawer.Screen options={setDrawerOptions("Detay")} name="PetScreen" component={PetScreen} />
       <Drawer.Screen options={setDrawerOptions("Randevu al")} name="TakeAppointment" component={TakeAppointment} />
     </Drawer.Navigator>
