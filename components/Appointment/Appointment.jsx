@@ -4,32 +4,51 @@ import { Card, Text, Icon, makeStyles, Dialog } from '@rneui/themed'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function Appointment(props) {
-  const { navigation } = props;
+  const { pet, type, hour, date, additionalMsg } = props.appointment;
   const styles = useStyles(props);
-  const [showDialog,toggleDialog] = React.useState(false)
+  const [showDialog, toggleDialog] = React.useState(false)
   const handlePress = () => {
     toggleDialog(!showDialog);
+  }
+  const setType = (type) => {
+    switch (type) {
+      case "vaccination":
+        return "Aşılama"
+      case "furcut":
+        return "Traş"
+      case "sterilization":
+        return "Kısırlaştırma"
+      case "nail":
+        return "Tırnak Kesimi"
+      case "control":
+        return "Genel Kontrol"
+      default:
+        return ""
+    }
   }
   return (
     <View>
       <TouchableOpacity onPress={handlePress}>
-      <Card wrapperStyle={styles.card}>
-        <Icon name="calendar" type='font-awesome' />
-        <View style={styles.flex}>
-          <Text>Tarih : 15.05.2022</Text>
-          <Text>Yapılan işlem :Aşı</Text>
-        </View>
-      </Card>
+        <Card wrapperStyle={styles.card}>
+          <Icon name="calendar" type='font-awesome' />
+          <View style={styles.flex}>
+            <Text>İsim : {pet}</Text>
+            <Text>Tarih : {new Date(date).toLocaleDateString("tr-TR")
+              .replace(/ /g, '-')}</Text>
+            <Text>Saat : {hour}</Text>
+            <Text>Yapılacak işlem : {setType(type)}</Text>
+          </View>
+        </Card>
       </TouchableOpacity>
       <Dialog
-      overlayStyle={{backgroundColor:"white"}}
-      isVisible={showDialog}
-      onBackdropPress={handlePress}>
+        overlayStyle={{ backgroundColor: "white" }}
+        isVisible={showDialog}
+        onBackdropPress={handlePress}>
         <Dialog.Title>Detay</Dialog.Title>
-        <Text style={styles.modalText}>Karma aşısı yapıldı.Genel kontrol yapıldı.</Text>
+        <Text style={styles.modalText}>{additionalMsg}</Text>
         <Dialog.Actions>
-        <Dialog.Button title="Kapat" onPress={handlePress}/>
-      </Dialog.Actions>
+          <Dialog.Button title="Kapat" onPress={handlePress} />
+        </Dialog.Actions>
       </Dialog>
     </View>
   )
@@ -46,10 +65,10 @@ const useStyles = makeStyles((theme, props) => ({
     alignSelf: "flex-start",
     marginLeft: 50
   },
-  modal:{
-    backgroundColor:"white"
+  modal: {
+    backgroundColor: "white"
   },
-  modalText:{
-    textAlign:"center"
+  modalText: {
+    textAlign: "center"
   }
 }))

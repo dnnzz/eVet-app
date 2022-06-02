@@ -2,7 +2,7 @@ import { ScrollView } from 'react-native'
 import React from 'react'
 import { Card, Icon, Text, makeStyles } from '@rneui/themed'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { getPetsFromDB } from '../../firebase/Firebase'
+import { getPetAppointmentFromDB, getPetsFromDB } from '../../firebase/Firebase'
 import { UserContext } from '../../firebase/Context'
 export default function Pets(props) {
     const { navigation } = props;
@@ -10,8 +10,11 @@ export default function Pets(props) {
     const styles = useStyles(props);
     const [pets,setPets] = React.useState([]);
     const [loading,setLoading] = React.useState(true);
-    const handlePress = () => {
-        navigation.navigate("Appointment")
+    const handlePress = async (petName) => {
+        let arr = await getPetAppointmentFromDB(user.email,petName);
+        if(arr.length){
+            navigation.navigate('SelectedPetAppointment',{arr})
+        }
     }
     const getInitial = async () => {
         let petArr = await getPetsFromDB(user.email,setLoading);
@@ -28,7 +31,7 @@ export default function Pets(props) {
         {loading ? 
         <Text>Yükleniyor...</Text> 
         :
-        pets?.map((pet,index) => (<TouchableOpacity key={index} onPress={handlePress}>
+        pets?.map((pet,index) => (<TouchableOpacity key={index} onPress={() => handlePress(pet.name)}>
             <Card wrapperStyle={styles.card}>
                 <Icon name="paw" type='font-awesome' />
                 <Text>Hayvan ismi : {pet.name}</Text>

@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword
 } from 'firebase/auth';
 import "firebase/firestore";
-import { getFirestore , setDoc , doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { getFirestore , setDoc , doc,query,getDoc, collection, getDocs, collectionGroup } from 'firebase/firestore';
 const firebaseConfig = {
   apiKey: "AIzaSyA8hCr73u7RiiVbDDsCjY942ULCjsGMNM4",
   authDomain: "evet-app-29a9b.firebaseapp.com",
@@ -90,6 +90,30 @@ export const getPetsFromDB = async (email,setLoading) => {
   })
   setLoading(false);
   return petsArr;
+}
+export const getPetAppointmentFromDB = async (email,petName) => {
+  if(!email) return;
+  let appointmentsArr = [];
+  const userRef = await doc(firestore,"userTable",email);
+  const petTableRef = await collection(userRef,"petTable");
+  const petRef = await doc(petTableRef,petName);
+  const appointments = await collection(petRef,"appointmentTable");
+  const appointmentsData = await getDocs(appointments);
+  appointmentsData.forEach((appointment) => {
+    appointmentsArr.push(appointment.data());
+  })
+  return appointmentsArr;
+}
+export const getAppointmentsFromDB = async (email,setLoading) => {
+  if(!email) return;
+  let appointmentsArr = [];
+  const appointments = query(collectionGroup(firestore,"appointmentTable"));
+  const appointmentsData = await getDocs(appointments);
+  appointmentsData.forEach((appointment) => {
+    appointmentsArr.push(appointment.data());
+  })
+  setLoading(false);
+  return appointmentsArr;
 }
 
 export const postAppointmentToDB = async (email,appointment) => {

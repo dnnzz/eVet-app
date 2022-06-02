@@ -1,31 +1,41 @@
 import { Logs } from 'expo';
 import { LogBox } from 'react-native';
 import React from "react";
-import { createDrawerNavigator , DrawerContentScrollView , DrawerItem , DrawerItemList} from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import Login from "./components/Login/Login";
 import Register from "./components/Register/Register";
 import Home from "./components/Home/Home";
 import Pets from './components/Pets/Pets';
 import Appointment from './components/Appointment/Appointment';
+import SelectedPetAppointment from './components/Appointment/SelectedPetAppointments';
 import Appointments from './components/Appointments/Appointments';
 import Adopt from './components/Adopt/Adopt';
 import PetScreen from './components/Adopt/PetScreen/PetScreen';
 import TakeAppointment from './components/TakeAppointment/TakeAppointment'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { UserContext } from './firebase/Context';
-import {addPetToDB, signOut} from './firebase/Firebase';
+import { addPetToDB, signOut } from './firebase/Firebase';
 import { Text, Dialog, Input } from '@rneui/themed';
 // Logs.disableExpoCliLogging();
 // LogBox.ignoreAllLogs();
 const Drawer = createDrawerNavigator();
 function setDrawerOptions(routeName) {
-  return routeName === "Login" && routeName === "Register" ? {
+  return routeName === "Giriş" && routeName === "Kayıt ol" ? {
     title: routeName,
     drawerActiveTintColor: "white",
     drawerActiveBackgroundColor: "#a7ecc7",
     headerTintColor: "black",
-    unmountOnBlur: true,  
-  } : {
+    unmountOnBlur: true,
+  } : routeName === "Randevular" || routeName === "Detay" ? {
+    title: routeName,
+    drawerActiveTintColor: "white",
+    drawerActiveBackgroundColor: "#a7ecc7",
+    headerTintColor: "black",
+    unmountOnBlur: true,
+    drawerItemStyle:{
+      display:"none"
+    }
+  }:{
     title: routeName,
     drawerActiveTintColor: "white",
     drawerActiveBackgroundColor: "#a7ecc7",
@@ -35,7 +45,7 @@ function setDrawerOptions(routeName) {
 }
 
 export default function AppStack(props) {
-  const {navigation} = props;
+  const { navigation } = props;
   const [petData, setPetData] = React.useState({
     name: "",
     info: ""
@@ -43,7 +53,7 @@ export default function AppStack(props) {
   const handleChange = (text, type) => {
     setPetData({ ...petData, [type]: text });
   }
-  const { user , setIsDataChanged} = React.useContext(UserContext);
+  const { user, setIsDataChanged } = React.useContext(UserContext);
   const render = React.useCallback(
     props => <Register {...props} />,
     []
@@ -55,7 +65,7 @@ export default function AppStack(props) {
   const handleAddPet = () => {
     toggleDialog(!showDialog);
     addPetToDB(user.email, petData);
-    setPetData({name:"",info:""});
+    setPetData({ name: "", info: "" });
     setIsDataChanged(true);
   }
   const renderAddScreen = () => (
@@ -68,8 +78,8 @@ export default function AppStack(props) {
         isVisible={showDialog}
         onBackdropPress={handlePress}>
         <Dialog.Title>Evcil Hayvan Ekle</Dialog.Title>
-        <Input onChangeText={(e) => handleChange(e,"name")} placeholderTextColor={"black"} placeholder='İsim' />
-        <Input onChangeText={(e) => handleChange(e,"info")} placeholderTextColor={"black"} placeholder='Bilgi' />
+        <Input onChangeText={(e) => handleChange(e, "name")} placeholderTextColor={"black"} placeholder='İsim' />
+        <Input onChangeText={(e) => handleChange(e, "info")} placeholderTextColor={"black"} placeholder='Bilgi' />
         <Dialog.Actions>
           <Dialog.Button title="Kapat" onPress={handlePress} />
           <Dialog.Button title="Ekle" onPress={handleAddPet} />
@@ -90,7 +100,7 @@ export default function AppStack(props) {
         ...setDrawerOptions("Hayvanlarım"),
         headerRight: () => renderAddScreen()
       }} name="Pets" component={Pets} />
-      <Drawer.Screen options={setDrawerOptions("Randevular")} name="Appointment" component={Appointment} />
+      <Drawer.Screen options={setDrawerOptions("Randevular")} name="SelectedPetAppointment" component={SelectedPetAppointment} />
       <Drawer.Screen options={setDrawerOptions("Tüm randevular")} name="Appointments" component={Appointments} />
       <Drawer.Screen options={setDrawerOptions("Sahiplenme")} name="Adopt" component={Adopt} />
       <Drawer.Screen options={setDrawerOptions("Detay")} name="PetScreen" component={PetScreen} />
