@@ -46,6 +46,7 @@ export default function TakeAppointment() {
     const postAppointment = () => {
         const payload = {
             id : uuid.v4(),
+            owner : user.email,
             pet : pet,
             type : value,
             hour : hour,

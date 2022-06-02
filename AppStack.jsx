@@ -51,7 +51,7 @@ export default function AppStack(props) {
   const handleChange = (text, type) => {
     setPetData({ ...petData, [type]: text });
   }
-  const { user, setIsDataChanged } = React.useContext(UserContext);
+  const { user, setIsDataChanged, isDataChanged } = React.useContext(UserContext);
   const render = React.useCallback(
     props => <Register {...props} />,
     []
@@ -64,7 +64,7 @@ export default function AppStack(props) {
     toggleDialog(!showDialog);
     addPetToDB(user.email, petData);
     setPetData({ name: "", info: "" });
-    setIsDataChanged(true);
+    setIsDataChanged(!isDataChanged);
   }
   function CustomDrawerContent(props) {
     return (

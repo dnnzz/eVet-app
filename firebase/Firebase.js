@@ -116,7 +116,10 @@ export const getAppointmentsFromDB = async (email,setLoading) => {
   const appointments = query(collectionGroup(firestore,"appointmentTable"));
   const appointmentsData = await getDocs(appointments);
   appointmentsData.forEach((appointment) => {
-    appointmentsArr.push(appointment.data());
+    let data = appointment.data();
+    if(data.owner === email){
+      appointmentsArr.push(data);
+    }
   })
   setLoading(false);
   return appointmentsArr;
@@ -124,7 +127,7 @@ export const getAppointmentsFromDB = async (email,setLoading) => {
 
 export const postAppointmentToDB = async (email,appointment) => {
   if(!email) return;
-  const {id,pet,type,hour,date,additionalMsg} = appointment;
+  const {id,pet,owner,type,hour,date,additionalMsg} = appointment;
   const userRef = await doc(firestore,"userTable",email);
   const petCollection = await collection(userRef,"petTable");
   const petRef = await doc(petCollection,pet);
@@ -134,6 +137,7 @@ export const postAppointmentToDB = async (email,appointment) => {
     await setDoc(appointmentRef,{
       id:id,
       pet:pet,
+      owner:owner,
       date:date,
       hour:hour,
       type:type,
