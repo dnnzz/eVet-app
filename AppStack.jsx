@@ -24,11 +24,13 @@ function setDrawerOptions(routeName) {
     drawerActiveTintColor: "white",
     drawerActiveBackgroundColor: "#a7ecc7",
     headerTintColor: "black",
+    unmountOnBlur: true,  
   } : {
     title: routeName,
     drawerActiveTintColor: "white",
     drawerActiveBackgroundColor: "#a7ecc7",
     headerTintColor: "black",
+    unmountOnBlur: true,
   }
 }
 
@@ -41,7 +43,7 @@ export default function AppStack(props) {
   const handleChange = (text, type) => {
     setPetData({ ...petData, [type]: text });
   }
-  const { user } = React.useContext(UserContext);
+  const { user , setIsDataChanged} = React.useContext(UserContext);
   const render = React.useCallback(
     props => <Register {...props} />,
     []
@@ -53,7 +55,8 @@ export default function AppStack(props) {
   const handleAddPet = () => {
     toggleDialog(!showDialog);
     addPetToDB(user.email, petData);
-    setPetData({name:"",info:""})
+    setPetData({name:"",info:""});
+    setIsDataChanged(true);
   }
   const renderAddScreen = () => (
     <>

@@ -12,6 +12,7 @@ export const UserProvider = ({ children }) => {
     password: "",
     veterinary: ""
   })
+  const [isDataChanged, setIsDataChanged] = useState(false);
   const contextLogin = async (email, password) => {
     login(auth, email, password);
   };
@@ -31,7 +32,14 @@ export const UserProvider = ({ children }) => {
     }
   }, []);
   return (
-    <UserContext.Provider value={{ user,contextLogin,createUserProfile,userDataState ,setUserDataState }}>
+    <UserContext.Provider value={{ 
+      user
+      ,contextLogin
+      ,createUserProfile
+      ,userDataState 
+      ,setUserDataState
+      ,isDataChanged
+      ,setIsDataChanged }}>
       {children}
     </UserContext.Provider>
   );

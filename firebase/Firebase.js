@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword
 } from 'firebase/auth';
 import "firebase/firestore";
-import { getFirestore , setDoc , doc, getDoc, collection, updateDoc } from 'firebase/firestore';
+import { getFirestore , setDoc , doc, getDoc, collection, getDocs } from 'firebase/firestore';
 const firebaseConfig = {
   apiKey: "AIzaSyA8hCr73u7RiiVbDDsCjY942ULCjsGMNM4",
   authDomain: "evet-app-29a9b.firebaseapp.com",
@@ -65,7 +65,6 @@ export const getUserDocument = async (email) =>{
 }
 
 export const addPetToDB = async (email,pet) => {
-  console.log(email,pet)
   if(!email) return;
   const {name,info} = pet;
   const userRef = await doc(firestore,"userTable",email);
@@ -79,6 +78,18 @@ export const addPetToDB = async (email,pet) => {
   }catch(error){
     console.error(error);
   }
+}
+export const getPetsFromDB = async (email,setLoading) => {
+  if(!email) return;
+  let petsArr = [];
+  const userRef = await doc(firestore,"userTable",email);
+  const petTableRef = await collection(userRef,"petTable");
+  const pets = await getDocs(petTableRef);
+  pets.forEach((pet) => {
+    petsArr.push(pet.data());
+  })
+  setLoading(false);
+  return petsArr;
 }
 
 export const signOut = () => auth.signOut();
