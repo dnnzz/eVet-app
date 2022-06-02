@@ -5,7 +5,14 @@ import {
   signInWithEmailAndPassword
 } from 'firebase/auth';
 import "firebase/firestore";
-import { getFirestore , setDoc , doc,query,getDoc, collection, getDocs, collectionGroup } from 'firebase/firestore';
+import { getFirestore , setDoc , 
+  doc,
+  query,
+  where,
+  getDoc, 
+  collection, 
+  getDocs, 
+  collectionGroup } from 'firebase/firestore';
 const firebaseConfig = {
   apiKey: "AIzaSyA8hCr73u7RiiVbDDsCjY942ULCjsGMNM4",
   authDomain: "evet-app-29a9b.firebaseapp.com",
@@ -118,14 +125,15 @@ export const getAppointmentsFromDB = async (email,setLoading) => {
 
 export const postAppointmentToDB = async (email,appointment) => {
   if(!email) return;
-  const {pet,type,hour,date,additionalMsg} = appointment;
+  const {id,pet,type,hour,date,additionalMsg} = appointment;
   const userRef = await doc(firestore,"userTable",email);
   const petCollection = await collection(userRef,"petTable");
   const petRef = await doc(petCollection,pet);
   const appointmentCollection = await collection(petRef,"appointmentTable");
-  const appointmentRef = await doc(appointmentCollection,pet);
+  const appointmentRef = await doc(appointmentCollection,id);
   try{
     await setDoc(appointmentRef,{
+      id:id,
       pet:pet,
       date:date,
       hour:hour,

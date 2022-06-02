@@ -6,7 +6,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Card, Text , Input , Button } from '@rneui/themed'
 import DropDownPicker from 'react-native-dropdown-picker'
 import { getPetsFromDB , postAppointmentToDB} from '../../firebase/Firebase'
-import { UserContext } from '../../firebase/Context'
+import { UserContext } from '../../firebase/Context';
+import uuid from 'react-native-uuid'
 export default function TakeAppointment() {
     const {user} = React.useContext(UserContext);
     const [open, setOpen] = React.useState(false);
@@ -44,6 +45,7 @@ export default function TakeAppointment() {
     }
     const postAppointment = () => {
         const payload = {
+            id : uuid.v4(),
             pet : pet,
             type : value,
             hour : hour,
