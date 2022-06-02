@@ -11,21 +11,18 @@ export default function Home(props) {
   const { navigation } = props;
   const {user} =  React.useContext(UserContext);
   const [vetInfo,setVetInfo]= React.useState(null);
-  const [isLoading,setLoading] = React.useState(true);
   const styles = useStyles(props);
   const handlePress = (routeName) => {
     navigation.navigate(routeName)
   }
-  const getData = async (vetId) => {
-    let vet = await(getSingleVeterinaryFromDB(vetId,setLoading)).data();
-    console.log(vet)
-  }
   const getCurrentUserVeterinary= async ()=>{
     let userDoc = (await getUserDocument(user.email)).data();
-    return getData(userDoc.veterinary) 
+    let vet = await getSingleVeterinaryFromDB(userDoc.veterinary);
+    vet.forEach(element => {
+      setVetInfo(element.data());
+    })
   }
   const zoomToMarker = () => {
-    console.log(vet);
     const region = {
       latitude: 36.8583502,
       longitude: 30.7409362,
@@ -36,7 +33,7 @@ export default function Home(props) {
   }
   React.useEffect(()=>{
     getCurrentUserVeterinary();
-  },[isLoading])
+  },[])
   return (
     <ScrollView contentContainerStyle={styles.view}>
       <TouchableOpacity onPress={() => handlePress("Pets")}>
@@ -61,14 +58,15 @@ export default function Home(props) {
         </Card>
       </TouchableOpacity>
       <View>
-        <FlipCard
+        {vetInfo && <FlipCard
         onFlipEnd={()=> zoomToMarker()} 
         style={styles.flipCardView}>
           <View style={styles.face}>
-            <Text>Veteriner adı : Patiler</Text>
-            <Text>Hekim İsim Soyisim : Kadir Elkin</Text>
-            <Text>Telefon : +905321234567</Text>
-            <Text>Email : pati@gmail.com</Text>
+            <Text>Veteriner adı : {vetInfo.name}</Text>
+            <Text>Hekim İsim Soyisim : {vetInfo.vetName}</Text>
+            <Text>Telefon : {vetInfo.phone}</Text>
+            <Text>Email : {vetInfo.email}</Text>
+            <Text>Adres: {vetInfo.address}</Text>
             <Text style={{textAlign:"center",padding:10}}>Yazıya tıklayarak harita görünümüne geçebilirsiniz.</Text>
           </View>
           <View style={styles.back}>
@@ -85,19 +83,19 @@ export default function Home(props) {
             >
                <Marker
         coordinate={{
-          latitude: 36.8583502,
-          longitude: 30.7409362,
+          latitude: vetInfo.lat,
+          longitude: vetInfo.lon,
         }}
         key={1}
-        title="Klinik"
-        description={"Adres"}
+        title={vetInfo.name}
+        description={vetInfo.address}
         resizeMode='contain'
       />
             </MapView>
             <Text style={{textAlign:"center",marginTop:10}}>Yazıya tıklayarak adres kısmına geçebilirsiniz.</Text>
             </TouchableOpacity>
           </View>
-        </FlipCard>
+        </FlipCard>}
       </View>
     </ScrollView>
   )

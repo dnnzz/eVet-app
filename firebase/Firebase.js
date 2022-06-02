@@ -169,21 +169,12 @@ export const asdgetUserDocument = async (email) =>{
     console.error(error);
   }
 }
-export const getSingleVeterinaryFromDB = async (veterinaryId,setLoading) => {
-  if(!veterinaryId) return null;
-  try{
+export const getSingleVeterinaryFromDB = async (veterinaryId) => {
     const veterinaryRef = 
     query(collection(firestore,"veterinary")
     ,where("vetId","==",veterinaryId));
     const veterinaryData = await getDocs(veterinaryRef);
-    veterinaryData.forEach((veterinary) => {
-      console.log(veterinary.data())
-    })
-    return;
-  }catch(error){
-    console.error(error);
-  }
-  setLoading(false);
+    return veterinaryData;
 }
 
 export const signOut = () => auth.signOut();
