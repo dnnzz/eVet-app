@@ -8,6 +8,7 @@ import "firebase/firestore";
 import { getFirestore , setDoc , 
   doc,
   query,
+  where,
   getDoc, 
   collection, 
   getDocs, 
@@ -147,6 +148,42 @@ export const postAppointmentToDB = async (email,appointment) => {
   }catch(error){
     console.error(error);
   }
+}
+
+export const getVeterinaryListFromDB = async (setLoading) => {
+  let veterinaryArr = [];
+  const veterinaryCollection = await collection(firestore,"veterinary");
+  const veterinaryData = await getDocs(veterinaryCollection);
+  veterinaryData.forEach((veterinary) => {
+    veterinaryArr.push(veterinary.data());
+  })
+  setLoading(false);
+  return veterinaryArr;
+}
+export const asdgetUserDocument = async (email) =>{
+  if(!email) return null;
+  try{
+    const userRef = doc(firestore,"userTable",email);
+    return await getDoc(userRef);
+  }catch(error){
+    console.error(error);
+  }
+}
+export const getSingleVeterinaryFromDB = async (veterinaryId,setLoading) => {
+  if(!veterinaryId) return null;
+  try{
+    const veterinaryRef = 
+    query(collection(firestore,"veterinary")
+    ,where("vetId","==",veterinaryId));
+    const veterinaryData = await getDocs(veterinaryRef);
+    veterinaryData.forEach((veterinary) => {
+      console.log(veterinary.data())
+    })
+    return;
+  }catch(error){
+    console.error(error);
+  }
+  setLoading(false);
 }
 
 export const signOut = () => auth.signOut();

@@ -2,9 +2,8 @@ import { ScrollView, SafeAreaView, View } from 'react-native'
 import React from 'react'
 import { Image, Input, Button, makeStyles } from '@rneui/themed';
 import DropDownPicker from 'react-native-dropdown-picker'
-import { register, signOut } from '../../firebase/Firebase';
+import { getVeterinaryListFromDB, register, signOut } from '../../firebase/Firebase';
 import { UserContext } from '../../firebase/Context';
-import { ListAccordionGroupContext } from 'react-native-paper/lib/typescript/components/List/ListAccordionGroup';
 
 
 export default function Register(props) {
@@ -13,13 +12,8 @@ export default function Register(props) {
     const {user,userDataState, setUserDataState, createUserProfile } = React.useContext(UserContext);
     const logo = require("../../assets/yesil.png");
     const [open, setOpen] = React.useState(false);
-    const [items, setItems] = React.useState([
-        { label: 'Vet hasan', value: 'hasan' },
-        { label: 'Vet ali', value: 'ali' },
-        { label: 'Vet mehmet', value: 'mehmet' },
-        { label: 'Şirin pati', value: 'sirinpati' },
-        { label: 'Hayvan hastanesi', value: 'hayvanhastanesi' },
-    ]);
+    const [loading,setLoading] = React.useState(true);
+    const [items, setItems] = React.useState([]);
     const [vetValue, setVetValue] = React.useState('');
     const handleChange = (text, type) => {
         setUserDataState({ ...userDataState, [type]: text });
@@ -29,9 +23,17 @@ export default function Register(props) {
         register(email, password)
         createUserProfile()
     }
+    const getVeterinaryList= async ()=>{
+        let vetArr = await getVeterinaryListFromDB(setLoading);
+        let dropDownArr = vetArr.map((vet,index) => ({key:index,label:vet.name,value:vet.vetId}))
+        setItems(dropDownArr);
+    }
     React.useEffect(() => {
         setUserDataState({ ...userDataState, veterinary: vetValue })
     }, [vetValue]);
+    React.useEffect(()=>{
+        getVeterinaryList();
+    },[]);
     return (
         <SafeAreaView>
             <ScrollView nestedScrollEnabled={true} contentContainerStyle={styles.container}>
@@ -66,7 +68,7 @@ export default function Register(props) {
                     style={styles.input}
                     placeholder='Şifre' />
                 <View style={{ marginTop: 4 }}>
-                    <DropDownPicker
+                    {!loading && <DropDownPicker
                         listMode='SCROLLVIEW'
                         open={open}
                         value={vetValue}
@@ -80,7 +82,7 @@ export default function Register(props) {
                             zIndex: 3, // works on ios
                             elevation: 3,
                         }}
-                    />
+                    />}
                 </View>
                 <Button onPress={() => handleSubmit()} buttonStyle={styles.button}>Kayıt ol</Button>
             </ScrollView>

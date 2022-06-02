@@ -2,16 +2,30 @@ import { View , ScrollView } from 'react-native'
 import React from 'react';
 import { Card, Button, Text, makeStyles } from '@rneui/themed';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import {UserContext} from '../../firebase/Context'
 import FlipCard from 'react-native-flip-card';
 import MapView , {Marker} from 'react-native-maps';
+import { getUserDocument ,getSingleVeterinaryFromDB } from '../../firebase/Firebase';
 export default function Home(props) {
   var mapRef;
   const { navigation } = props;
+  const {user} =  React.useContext(UserContext);
+  const [vetInfo,setVetInfo]= React.useState(null);
+  const [isLoading,setLoading] = React.useState(true);
   const styles = useStyles(props);
   const handlePress = (routeName) => {
     navigation.navigate(routeName)
   }
+  const getData = async (vetId) => {
+    let vet = await(getSingleVeterinaryFromDB(vetId,setLoading)).data();
+    console.log(vet)
+  }
+  const getCurrentUserVeterinary= async ()=>{
+    let userDoc = (await getUserDocument(user.email)).data();
+    return getData(userDoc.veterinary) 
+  }
   const zoomToMarker = () => {
+    console.log(vet);
     const region = {
       latitude: 36.8583502,
       longitude: 30.7409362,
@@ -20,6 +34,9 @@ export default function Home(props) {
     }
    mapRef ? mapRef.animateToRegion(region, 2500) : null
   }
+  React.useEffect(()=>{
+    getCurrentUserVeterinary();
+  },[isLoading])
   return (
     <ScrollView contentContainerStyle={styles.view}>
       <TouchableOpacity onPress={() => handlePress("Pets")}>
