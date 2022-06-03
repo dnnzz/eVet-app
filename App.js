@@ -6,8 +6,12 @@ import { createTheme, ThemeProvider } from "@rneui/themed";
 import { NavigationContainer , DefaultTheme } from "@react-navigation/native";
 import { UserProvider } from './firebase/Context';
 import AppStack from './AppStack';
-// Logs.disableExpoCliLogging();
-// LogBox.ignoreAllLogs();
+Logs.disableExpoCliLogging();
+LogBox.ignoreLogs([
+  "ViewPropTypes will be removed",
+  "ColorPropType will be removed",
+  "AsyncStorage has been extracted",
+  ])
 const theme = createTheme({
   colors: {
     background: "white"

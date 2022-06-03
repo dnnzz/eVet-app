@@ -1,5 +1,3 @@
-import { Logs } from 'expo';
-import { LogBox } from 'react-native';
 import React from "react";
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import Login from "./components/Login/Login";
@@ -16,8 +14,6 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { UserContext } from './firebase/Context';
 import { addPetToDB, signOut } from './firebase/Firebase';
 import { Text, Dialog, Input } from '@rneui/themed';
-// Logs.disableExpoCliLogging();
-// LogBox.ignoreAllLogs();
 const Drawer = createDrawerNavigator();
 function setDrawerOptions(routeName) {
   return routeName === "Giriş" && routeName === "Kayıt ol" ? {
@@ -116,7 +112,7 @@ export default function AppStack(props) {
       }} name="Pets" component={Pets} />
       <Drawer.Screen options={setDrawerOptions("Randevular")} name="SelectedPetAppointment" component={SelectedPetAppointment} />
       <Drawer.Screen options={setDrawerOptions("Tüm randevular")} name="Appointments" component={Appointments} />
-      <Drawer.Screen options={setDrawerOptions("Sahiplenme")} name="OwnerShip" component={Adopt} />
+      <Drawer.Screen options={setDrawerOptions("Sahiplenme")} name="Ownership" component={Adopt} />
       <Drawer.Screen options={setDrawerOptions("Detay")} name="PetScreen" component={PetScreen} />
       <Drawer.Screen options={setDrawerOptions("Randevu al")} name="TakeAppointment" component={TakeAppointment} />
     </Drawer.Navigator>
