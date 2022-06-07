@@ -24,8 +24,8 @@ export default function Home(props) {
   }
   const zoomToMarker = () => {
     const region = {
-      latitude: 36.8583502,
-      longitude: 30.7409362,
+      latitude: vetInfo.lat,
+      longitude: vetInfo.lon,
       latitudeDelta: 0.007,
       longitudeDelta: 0.004
     }
