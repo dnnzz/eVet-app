@@ -7,9 +7,11 @@ import { Card, Text , Input , Button } from '@rneui/themed'
 import DropDownPicker from 'react-native-dropdown-picker'
 import { getPetsFromDB , postAppointmentToDB} from '../../firebase/Firebase'
 import { UserContext } from '../../firebase/Context';
-import uuid from 'react-native-uuid'
+import uuid from 'react-native-uuid';
 export default function TakeAppointment() {
+    // get user info from context provider
     const {user} = React.useContext(UserContext);
+    // for dropdown appointment type 
     const [open, setOpen] = React.useState(false);
     const [value, setValue] = React.useState(null);
     const [items, setItems] = React.useState([
@@ -21,11 +23,13 @@ export default function TakeAppointment() {
     ]);
     const [openPet, setOpenPet] = React.useState(false);
     const [pet, setPet] = React.useState(null);
+    //---------------------------
     const [pets, setPets] = React.useState([]);
     const [hour,setHour] = React.useState("09:00");
     const [date,setDate] = React.useState(null);
     const [loading,setLoading] = React.useState(true);
     const [additionalMsg,setAdditionalMsg] = React.useState("");
+    // fetch users pet from db and render it to dropdown picker for select
     const getInitial = async () => {
         let petArr = await getPetsFromDB(user.email,setLoading);
         let dropDownArr = petArr.map(pet => ({label:pet.name,value:pet.name}))
@@ -34,15 +38,19 @@ export default function TakeAppointment() {
     React.useEffect(() => {
         getInitial();
     } , []);
+    // sets selected hour for payload to send db
     const handlePress = (selectedHour) => {
         setHour(selectedHour)
     }
+    // date picker handler for select date and set it to payload 
     const handleDateChange = (date) => {
         setDate(date)
     }
+    // additional msg input field handler 
     const handleChange = (e) => {
         setAdditionalMsg(e);
     }
+    // posts appointment data object to db 
     const postAppointment = () => {
         const payload = {
             id : uuid.v4(),
@@ -53,6 +61,8 @@ export default function TakeAppointment() {
             date : date.toString(),
             additionalMsg : additionalMsg
         }
+        // takes two parameter user email , payload 
+        // user email is coming from usercontext - user 
         postAppointmentToDB(user.email,payload);
     }
   return ( 

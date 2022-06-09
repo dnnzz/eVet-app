@@ -2,7 +2,7 @@ import { View } from 'react-native'
 import React from 'react'
 import { Card, Text, Icon, makeStyles, Dialog } from '@rneui/themed'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+// same as appointment screen just for selected pet 
 export default function SelectedPetAppointments(props) {
     const styles = useStyles(props);
     const [showDialog, toggleDialog] = React.useState(false)

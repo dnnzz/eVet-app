@@ -24,9 +24,11 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth();
+// firebase login function we use signIn with email and password for authentication
 export const login = async (email, password) => {
   signInWithEmailAndPassword(auth, email, password)
 }
+// firebase register function we use createUserWithEmailAndPassword for registering
 export const register = (email, password) => {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
@@ -71,10 +73,13 @@ export const getUserDocument = async (email) =>{
     console.error(error);
   }
 }
-// adds pet to firestore collection
+// adds pet to firestore collection this imported at PetsScreen.js
 export const addPetToDB = async (email,pet) => {
   if(!email) return;
   const {name,info} = pet;
+  // identify which collection is effect from this function
+  // Table structure is :
+  // userTable -> example@gmail.com -> petTable -> below petRef
   const userRef = await doc(firestore,"userTable",email);
   const petTableRef = await collection(userRef,"petTable");
   const petRef = await doc(petTableRef,name);
@@ -87,6 +92,7 @@ export const addPetToDB = async (email,pet) => {
     console.error(error);
   }
 }
+// gets current user pets from DB 
 export const getPetsFromDB = async (email,setLoading) => {
   if(!email) return;
   let petsArr = [];
@@ -99,6 +105,7 @@ export const getPetsFromDB = async (email,setLoading) => {
   setLoading(false);
   return petsArr;
 }
+// gets single pets appointment from DB in order to show it on screen
 export const getPetAppointmentFromDB = async (email,petName) => {
   if(!email) return;
   let appointmentsArr = [];
@@ -112,6 +119,7 @@ export const getPetAppointmentFromDB = async (email,petName) => {
   })
   return appointmentsArr;
 }
+// gets current user's all appointments not single one 
 export const getAppointmentsFromDB = async (email,setLoading) => {
   if(!email) return;
   let appointmentsArr = [];
@@ -126,7 +134,7 @@ export const getAppointmentsFromDB = async (email,setLoading) => {
   setLoading(false);
   return appointmentsArr;
 }
-
+// creates new appointment to DB 
 export const postAppointmentToDB = async (email,appointment) => {
   if(!email) return;
   const {id,pet,owner,type,hour,date,additionalMsg} = appointment;

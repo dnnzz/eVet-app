@@ -6,22 +6,37 @@ import {UserContext} from '../../firebase/Context'
 import FlipCard from 'react-native-flip-card';
 import MapView , {Marker} from 'react-native-maps';
 import { getUserDocument ,getSingleVeterinaryFromDB } from '../../firebase/Firebase';
+// Home screen
 export default function Home(props) {
+  // variable for mapRef that we show on flip card 
   var mapRef;
+  // taken navigation prop from AppStack navigation 
   const { navigation } = props;
+  // User info that providing from UserContext
   const {user} =  React.useContext(UserContext);
+  // veterinary detailed info state for flip card fields
+  // this will fetching from db and set to state
   const [vetInfo,setVetInfo]= React.useState(null);
   const styles = useStyles(props);
+  // handles which screen we want to show on screen
+  // routeName is -> "PetScreen" ex. if user press it'll show PetScreen
+  // routeName is parameter that we pass to navigation.navigate
   const handlePress = (routeName) => {
     navigation.navigate(routeName)
   }
+  // fetching veterinary info from db according to current users email 
+  // the user email is provided from UserContext
   const getCurrentUserVeterinary= async ()=>{
     let userDoc = (await getUserDocument(user.email)).data();
+    // fetching vet info from db 
     let vet = await getSingleVeterinaryFromDB(userDoc.veterinary);
+    // vet info is array db sends that information 
     vet.forEach(element => {
       setVetInfo(element.data());
     })
   }
+  // Using mapRef and animates zoom animation to marker
+  // region latitude and longitude coming from above getCurrentUserVEterinary function (from db)
   const zoomToMarker = () => {
     const region = {
       latitude: vetInfo.lat,
@@ -31,6 +46,9 @@ export default function Home(props) {
     }
    mapRef ? mapRef.animateToRegion(region, 2500) : null
   }
+  // fetching current user veterinary info from db only once 
+  // cuz use effect's second parameter is empty array [] 
+  // meaning that this empty array not related any other state just works only once
   React.useEffect(()=>{
     getCurrentUserVeterinary();
   },[])

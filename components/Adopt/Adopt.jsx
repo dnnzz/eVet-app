@@ -2,7 +2,8 @@ import { View } from 'react-native'
 import React from 'react'
 import { Input , Card ,Text ,Icon , makeStyles } from '@rneui/themed'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+// Adoptable pet screen that displays the pet's information if we press on pet Card it'll display
+// petscreen component to screen
 export default function Adopt(props) {
     const { navigation } = props;
     const styles = useStyles(props);

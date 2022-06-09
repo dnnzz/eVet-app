@@ -2,14 +2,18 @@ import { View } from 'react-native'
 import React from 'react'
 import { Card, Text, Icon, makeStyles, Dialog } from '@rneui/themed'
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
+// Renders all appointments to screen 
 export default function Appointment(props) {
   const { pet, type, hour, date, additionalMsg } = props.appointment;
   const styles = useStyles(props);
+  // shows the dialog when we press on single appointment 
+  // it'll displays additional appointment note if we press on appointment card
   const [showDialog, toggleDialog] = React.useState(false)
+  // toggles dialog screen shown state
   const handlePress = () => {
     toggleDialog(!showDialog);
   }
+  // localization for appointment type
   const setType = (type) => {
     switch (type) {
       case "vaccination":

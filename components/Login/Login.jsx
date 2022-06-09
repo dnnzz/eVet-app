@@ -2,18 +2,21 @@ import { View } from 'react-native'
 import React from 'react'
 import { Image, Input, Button, makeStyles } from '@rneui/themed';
 import { UserContext } from '../../firebase/Context';
-import { auth } from '../../firebase/Firebase';
 export default function Login(props) {
+  // get login function from user context that we provide data UserProvider
   const { contextLogin } = React.useContext(UserContext)
   const styles = useStyles(props);
   const logo = require("../../assets/yesil.png");
+  // Keeps user input state to send login function
   const [userDataState, setUserDataState] = React.useState({
     email: "",
     password: ""
   })
+  // handles input change if user press any key on keyboard above userDataState updates
   const handleChange = (text, type) => {
     setUserDataState({ ...userDataState, [type]: text });
   }
+  // Uses context login to login user (if user is logged in it'll redirect to home screen)
   const handleSignIn = () => {
     const { email, password } = userDataState;
     contextLogin(email, password);

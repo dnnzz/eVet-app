@@ -3,6 +3,8 @@ import React from 'react'
 import Carousel  , {ParallaxImage,Pagination} from 'react-native-snap-carousel';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text } from '@rneui/themed';
+// Single adopting pet screen that displays the pet's information and allows the 
+//user to adopt the pet (not functional it displays dynamically).
 export default function PetScreen() {
     const items = [
         {
@@ -15,6 +17,7 @@ export default function PetScreen() {
             src:"https://wamu.org/wp-content/uploads/2017/05/unimpressed-cat-150x150.jpg"
         }
       ]
+      // Renders the carousel with the pet's images.
     const _renderItem = ({item, index},parallaxProps) => {
         return (
                 <View style={styles.item}>
@@ -28,6 +31,7 @@ export default function PetScreen() {
                 </View>
         );
     }
+    // sets the pagination for the carousel.
     const [index,setIndex] = React.useState(0);
   return (
     <SafeAreaView>
