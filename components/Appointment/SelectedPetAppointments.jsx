@@ -2,12 +2,20 @@ import { View } from 'react-native'
 import React from 'react'
 import { Card, Text, Icon, makeStyles, Dialog } from '@rneui/themed'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import {cancelAppointment} from '../../firebase/Firebase';
+import {UserContext} from '../../firebase/Context';
 // same as appointment screen just for selected pet 
 export default function SelectedPetAppointments(props) {
     const styles = useStyles(props);
     const [showDialog, toggleDialog] = React.useState(false)
+    const {user ,setIsDataChanged , isDataChanged} = React.useContext(UserContext);
     const handlePress = () => {
         toggleDialog(!showDialog);
+    }
+    const handleCancel = (id,pet) => {
+        cancelAppointment(user.email,id,pet)
+        toggleDialog(!showDialog);
+        setIsDataChanged(!isDataChanged)
     }
     const setType = (type) => {
         switch (type) {
@@ -49,6 +57,7 @@ export default function SelectedPetAppointments(props) {
                         <Text style={styles.modalText}>{item.additionalMsg || "Not bulunmamaktadır."}</Text>
                         <Dialog.Actions>
                             <Dialog.Button title="Kapat" onPress={handlePress} />
+                            <Dialog.Button title="İptal et" onPress={() => handleCancel(item.id,item.pet)} />
                         </Dialog.Actions>
                     </Dialog>
                 </View>

@@ -2,9 +2,13 @@ import { View } from 'react-native'
 import React from 'react'
 import { Card, Text, Icon, makeStyles, Dialog } from '@rneui/themed'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { cancelAppointment } from '../../firebase/Firebase';
+import { UserContext } from '../../firebase/Context';
 // Renders all appointments to screen 
 export default function Appointment(props) {
-  const { pet, type, hour, date, additionalMsg } = props.appointment;
+  const { pet, type, hour, date, additionalMsg , id} = props.appointment;
+  const {email} = props.user;
+  const {setIsDataChanged,isDataChanged} = React.useContext(UserContext);
   const styles = useStyles(props);
   // shows the dialog when we press on single appointment 
   // it'll displays additional appointment note if we press on appointment card
@@ -13,6 +17,11 @@ export default function Appointment(props) {
   const handlePress = () => {
     toggleDialog(!showDialog);
   }
+  const handleCancel = () => {
+    cancelAppointment(email,id,pet)
+    toggleDialog(!showDialog);
+    setIsDataChanged(!isDataChanged);
+}
   // localization for appointment type
   const setType = (type) => {
     switch (type) {
@@ -49,9 +58,10 @@ export default function Appointment(props) {
         isVisible={showDialog}
         onBackdropPress={handlePress}>
         <Dialog.Title>Detay</Dialog.Title>
-        <Text style={styles.modalText}>{additionalMsg}</Text>
+        <Text style={styles.modalText}>{additionalMsg || "Not bulunmamaktadır."}</Text>
         <Dialog.Actions>
           <Dialog.Button title="Kapat" onPress={handlePress} />
+          <Dialog.Button title="İptal et" onPress={()=> handleCancel()} />
         </Dialog.Actions>
       </Dialog>
     </View>

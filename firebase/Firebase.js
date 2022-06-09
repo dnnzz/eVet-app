@@ -12,7 +12,8 @@ import { getFirestore , setDoc ,
   getDoc, 
   collection, 
   getDocs, 
-  collectionGroup } from 'firebase/firestore';
+  collectionGroup, 
+  deleteDoc} from 'firebase/firestore';
 const firebaseConfig = {
   apiKey: "AIzaSyA8hCr73u7RiiVbDDsCjY942ULCjsGMNM4",
   authDomain: "evet-app-29a9b.firebaseapp.com",
@@ -153,6 +154,19 @@ export const postAppointmentToDB = async (email,appointment) => {
       type:type,
       additionalMsg:additionalMsg
     });
+  }catch(error){
+    console.error(error);
+  }
+}
+
+export const cancelAppointment = async (email,appointmentId,pet) => {
+  const userRef = await doc(firestore,"userTable",email);
+  const petCollection = await collection(userRef,"petTable");
+  const petRef = await doc(petCollection,pet);
+  const appointmentCollection = await collection(petRef,"appointmentTable");
+  const appointmentRef = await doc(appointmentCollection,appointmentId);
+  try{
+    await deleteDoc(appointmentRef)
   }catch(error){
     console.error(error);
   }
